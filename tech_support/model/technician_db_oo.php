@@ -23,8 +23,8 @@ class TechnicianDB {
       $technicians[] = new Technician(
         $row['techID'],
         $row['firstName'],
-        $row['$lastName'],
-        $row['$email'],
+        $row['lastName'],
+        $row['email'],
         $row['phone'],
         $row['password']
       );
@@ -43,6 +43,8 @@ class TechnicianDB {
       $statement->bindValue(':email', $technician->getEmail(), PDO::PARAM_STR);
       $statement->bindValue(':phone', $technician->getPhone(), PDO::PARAM_STR);
       $statement->bindValue(':password', $technician->getPassword(), PDO::PARAM_STR);
+      $statement->execute();
+      $statement->closeCursor;
     } catch (PDOException $e) {
       error_log("Database Error [addTechnician]: " . $e->getMessage());
 
@@ -67,7 +69,7 @@ class TechnicianDB {
 
   public function getAllTechnicianByID($techID) {
     try {
-      $query = 'SELECT FROM technicians WHERE techID = :techID';
+      $query = 'SELECT * FROM technicians WHERE techID = :techID';
       $statement = $this->db->prepare($query);
       $statement->bindValue(':techID', $techID, PDO::PARAM_INT);
       $statement->execute();
@@ -104,7 +106,7 @@ class TechnicianDB {
       $statement->bindValue(':last_name', $technician->getLastName(), PDO::PARAM_STR);
       $statement->bindValue(':email', $technician->getEmail(), PDO::PARAM_STR);
       $statement->bindValue(':phone', $technician->getPhone(), PDO::PARAM_STR);
-      $statement->bindValue(':password', $technician->getPassword(), PDO::PARAM_INT);
+      $statement->bindValue(':password', $technician->getPassword(), PDO::PARAM_STR);
       $statement->execute();
       $statement->closeCursor();
     } catch (PDOException $e) {
